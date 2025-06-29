@@ -1,0 +1,43 @@
+@page "/book"
+@inject IAppointmentService AppointmentService
+@inject NavigationManager Nav
+@using Domain.Entities
+@using MudBlazor
+
+<EditForm Model="appointment" OnValidSubmit="HandleValidSubmit">
+    <MudTextField @bind-Value="appointment.FirstName" Label="First Name" Required="true" />
+    <MudTextField @bind-Value="appointment.LastName" Label="Last Name" Required="true" />
+    <MudDatePicker Date="appointment.Date" DateChanged="OnDateChanged" Label="Date" />
+    <MudSelect T="int" Label="Specialist" @bind-Value="appointment.SpecialistId" Required="true">
+        @foreach(var s in specialists)
+        {
+            <MudSelectItem Value="@s.Id">@s.Name</MudSelectItem>
+        }
+    </MudSelect>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+</EditForm>
+
+@code {
+    private Appointment appointment = new();
+    private List<Specialist> specialists = new()
+    {
+        new Specialist{ Id=1, Name="Laryngolog"},
+        new Specialist{ Id=2, Name="Stomatolog"},
+        new Specialist{ Id=3, Name="Internista"},
+        new Specialist{ Id=4, Name="Chirurg"},
+        new Specialist{ Id=5, Name="Dietetyk"},
+        new Specialist{ Id=6, Name="Neurolog"},
+    };
+
+    private async Task HandleValidSubmit()
+    {
+        await AppointmentService.AddAppointmentAsync(appointment);
+        Nav.NavigateTo("/");
+    }
+
+    private void OnDateChanged(DateTime? value)
+    {
+        if (value.HasValue)
+            appointment.Date = value.Value;
+    }
+}

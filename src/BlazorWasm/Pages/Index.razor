@@ -1,0 +1,16 @@
+@page "/"
+@using MudBlazor
+@inject NavigationManager Nav
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">Hello from Blazor WASM</MudText>
+    <MudButton Variant="Variant.Filled" OnClick="Go">Details</MudButton>
+    <MudImage Src="sample.png" Alt="Sample" Width="200" />
+</MudPaper>
+
+@code {
+    private void Go()
+    {
+        Nav.NavigateTo("/details");
+    }
+}
