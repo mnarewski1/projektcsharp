@@ -1,0 +1,18 @@
+@page "/"
+@inject Application.IAppointmentService AppointmentService
+
+<h3>Appointments</h3>
+<ul>
+@foreach(var a in appointments)
+{
+    <li>@($"{a.Date:yyyy-MM-dd HH:mm} - {a.FirstName} {a.LastName}")</li>
+}
+</ul>
+
+@code {
+    private IEnumerable<Domain.Entities.Appointment> appointments = new List<Domain.Entities.Appointment>();
+    protected override async Task OnInitializedAsync()
+    {
+        appointments = await AppointmentService.GetAppointmentsAsync();
+    }
+}
