@@ -1,0 +1,19 @@
+@page "/appointment/{Id:int}"
+@inject Application.IAppointmentService AppointmentService
+
+<h3>Appointment Details</h3>
+@if(appointment != null)
+{
+    <p>Date: @appointment.Date</p>
+    <p>Patient: @appointment.FirstName @appointment.LastName</p>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Domain.Entities.Appointment? appointment;
+    protected override async Task OnParametersSetAsync()
+    {
+        appointment = await AppointmentService.GetByIdAsync(Id);
+    }
+}

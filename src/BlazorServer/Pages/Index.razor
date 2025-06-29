@@ -1,0 +1,29 @@
+@page "/"
+@inject Application.IAppointmentService AppointmentService
+@inject NavigationManager Nav
+@using Domain.Entities
+
+<MudTable Items="appointments">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Appointments</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(()=>Nav.NavigateTo("/book"))">Book</MudButton>
+    </ToolBarContent>
+    <RowTemplate>
+        <MudTableRow>
+            <MudTableCell DataLabel="Date">@context.Date.ToString("yyyy-MM-dd HH:mm")</MudTableCell>
+            <MudTableCell DataLabel="Patient">@context.FirstName @context.LastName</MudTableCell>
+            <MudTableCell>
+                <MudButton Variant="Variant.Text" OnClick="@(()=>Nav.NavigateTo($"/appointment/{context.Id}"))">Details</MudButton>
+            </MudTableCell>
+        </MudTableRow>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private IEnumerable<Appointment> appointments = new List<Appointment>();
+    protected override async Task OnInitializedAsync()
+    {
+        appointments = await AppointmentService.GetAppointmentsAsync();
+    }
+}
